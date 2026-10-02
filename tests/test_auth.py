@@ -19,11 +19,11 @@ def test_get_me_without_token(auth):
     assert response.status_code == 401
     assert "message" in response.json()
 
-def test_refresh_success(auth, token):
-    response = auth.login("emilys", "emilyspass")
-    refresh_token = response.json()["refreshToken"]
+def test_refresh_success(auth):
+    login_response = auth.login("emilys", "emilyspass")
+    refresh_token = login_response.json()["refreshToken"]
     refresh_response = auth.refresh(refresh_token)
-    assert response.status_code == 200
+    assert login_response.status_code == 200, f"Login failed: {login_response.status_code}"
 
     data = refresh_response.json()
     assert "accessToken" in data, "Нет accessToken в ответе"
