@@ -1,6 +1,7 @@
 import pytest
 from api.auth import AuthApi
 from api.client import ApiClient
+from api.products import ProductsApi
 
 BASE_URL = "https://dummyjson.com"
 
@@ -24,4 +25,16 @@ def token(auth):
 def auth_headers(token):
     return {"Authorization": f"Bearer {token}"}
 
+@pytest.fixture(scope="session")
+def products(api):
+    return ProductsApi(api)
 
+@pytest.fixture
+def product_data():
+    return {
+        "title": "Test Product",
+        "description": "Test description",
+        "price": 99,
+        "category": "test",
+        "brand": "TestBrand",
+    }
