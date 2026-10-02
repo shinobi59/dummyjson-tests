@@ -28,7 +28,7 @@ class ApiClient:
 
         response = self.session.request(method, url, **kwargs)
 
-        logger.info(f'{response.status_code}')
+        logger.info(f'- {response.status_code} {url}')
         return response
 
     def get(self, path, **kwargs):
@@ -46,10 +46,13 @@ class ApiClient:
     def patch(self, path, **kwargs):
         return self._request('PATCH', path, **kwargs)
 
+    def clear_token(self):
+        self.session.headers.pop("Authorization", None)
+
     def set_token(self, token):
-        self.session.headers.update({
-            'Authorization': f'Bearer {token}'
-        })
+        if not token:
+            raise ValueError("Token не может быть пустым")
+        self.session.headers.update({"Authorization": f"Bearer {token}"})
 
     def close(self):
         self.session.close()
