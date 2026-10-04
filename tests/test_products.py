@@ -6,6 +6,11 @@ import allure
 def test_get_all_products(products):
     response = products.get_all()
     assert response.status_code == 200
+    data = response.json()
+    assert "products" in data
+    assert isinstance(data["products"], list)
+    assert len(data["products"]) > 0
+    assert data["total"] > 0
 
 @allure.feature("Products")
 @allure.title("Пагинация продукта")
@@ -13,8 +18,11 @@ def test_get_all_products(products):
 def test_get_products_pagination(products):
     page_1 = products.get_all(params={"limit": 5, "skip": 0})
     page_2 = products.get_all(params={"limit": 5, "skip": 5})
+    first_id_p1 = page_1.json()["products"][0]["id"]
+    first_id_p2 = page_2.json()["products"][0]["id"]
     assert page_1.status_code == 200
     assert page_2.status_code == 200
+    assert first_id_p1 != first_id_p2
     assert len(page_1.json()["products"]) == 5
     assert len(page_2.json()["products"]) == 5
 
@@ -35,23 +43,29 @@ def test_get_unknown_product(products):
     response = products.get_by_id(99999)
     data = response.json()
     assert response.status_code == 404
+    assert "message" in data
 
 @allure.feature("Products")
 @allure.title("Поиск продукта")
 @allure.severity(allure.severity_level.NORMAL)
 def test_search_products(products):
     response = products.search("phone")
+    data = response.json()
     assert response.status_code == 200
     assert response.json()["products"] is not None
-    for product in response.json()["products"]:
-        assert product["title"] is not None
+    for product in data["products"]:
+        combined = (
+                product["title"] + " " +
+                product.get("description", "") + " " +
+                product.get("category", "")
+        ).lower()
+        assert "phone" in combined, f"Нет 'phone' в: {product['title']}"
 
 @allure.feature("Products")
 @allure.title("Создать продукт")
 @allure.severity(allure.severity_level.CRITICAL)
 def test_create_product(products, product_data):
     response = products.create(product_data)
-    print(response.status_code)
     assert response.status_code == 201
     assert response.json()["id"] is not None
     assert response.json()["title"] == product_data["title"]
