@@ -1,5 +1,6 @@
 from api.client import ApiClient
 
+
 class AuthApi:
     def __init__(self, client: ApiClient):
         self.client = client
@@ -24,5 +25,3 @@ class AuthApi:
         }
         response = self.client.post('/auth/refresh', json=payload)
         return response
-
-

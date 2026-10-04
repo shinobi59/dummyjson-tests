@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class ApiClient:
     def __init__(self, base_url, timeout=10):
         self.base_url = base_url.rstrip("/")
@@ -56,4 +57,3 @@ class ApiClient:
 
     def close(self):
         self.session.close()
-

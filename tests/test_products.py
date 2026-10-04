@@ -1,5 +1,6 @@
 import allure
 
+
 @allure.feature("Products")
 @allure.title("Получить все продукты")
 @allure.severity(allure.severity_level.NORMAL)
@@ -11,6 +12,7 @@ def test_get_all_products(products):
     assert isinstance(data["products"], list)
     assert len(data["products"]) > 0
     assert data["total"] > 0
+
 
 @allure.feature("Products")
 @allure.title("Пагинация продукта")
@@ -26,6 +28,7 @@ def test_get_products_pagination(products):
     assert len(page_1.json()["products"]) == 5
     assert len(page_2.json()["products"]) == 5
 
+
 @allure.feature("Products")
 @allure.title("Получить продукт по ID")
 @allure.severity(allure.severity_level.CRITICAL)
@@ -36,6 +39,7 @@ def test_get_product_by_id(products):
     assert response.status_code == 200
     assert data["title"] is not None
 
+
 @allure.feature("Products")
 @allure.title("Получить неизвестный продукт")
 @allure.severity(allure.severity_level.MINOR)
@@ -44,6 +48,7 @@ def test_get_unknown_product(products):
     data = response.json()
     assert response.status_code == 404
     assert "message" in data
+
 
 @allure.feature("Products")
 @allure.title("Поиск продукта")
@@ -61,6 +66,7 @@ def test_search_products(products):
         ).lower()
         assert "phone" in combined, f"Нет 'phone' в: {product['title']}"
 
+
 @allure.feature("Products")
 @allure.title("Создать продукт")
 @allure.severity(allure.severity_level.CRITICAL)
@@ -69,6 +75,7 @@ def test_create_product(products, product_data):
     assert response.status_code == 201
     assert response.json()["id"] is not None
     assert response.json()["title"] == product_data["title"]
+
 
 @allure.feature("Products")
 @allure.title("Обновить продукт")

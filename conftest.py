@@ -1,5 +1,6 @@
 import pytest
 from api.auth import AuthApi
+from api.carts import CartsApi
 from api.client import ApiClient
 from api.products import ProductsApi
 
@@ -37,4 +38,18 @@ def product_data():
         "price": 99,
         "category": "test",
         "brand": "TestBrand",
+    }
+
+@pytest.fixture(scope="session")
+def carts(api):
+    return CartsApi(api)
+
+@pytest.fixture
+def cart_data():
+    return {
+      "userId": 1,
+      "products": [
+        {"id": 144, "quantity": 4},
+        {"id": 98, "quantity": 1}
+      ]
     }
