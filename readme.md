@@ -45,7 +45,7 @@ pytest
 allure serve allure-results
 ```
 
-Либо открыть **живой отчёт**: [shinobi59.github.io/restful-booker-tests](https://shinobi59.github.io/dummyjson-tests/)
+Либо открыть **живой отчёт**: [shinobi59.github.io/dummyjson-tests](https://shinobi59.github.io/dummyjson-tests/)
 
 ## Установка и запуск
 
